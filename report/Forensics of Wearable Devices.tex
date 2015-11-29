@@ -8,6 +8,7 @@
 \usepackage{url}
 \usepackage{natbib}
 \usepackage{wrapfig}
+\usepackage{framed}
 
 \usepackage[margin=3cm]{geometry}
 
@@ -285,20 +286,20 @@ Benoît Allard is the creator of Galileo\footnote{https://bitbucket.org/benallar
 This results in a dump of the data from the device as shown in figure~\ref{fig:megadump}. This is a fragment of a dump often described as a “megadump”. There is another type of dump described as a “minidump”, or live data. The difference between the two is that the megadump contains the data sent to Fitbit.com, while the minidump apparently is a “live stream” of data for display purposes whenever the Fitbit device is near a paired smartphone. This enables the smartphone to display current data without synchronizing to the Fitbit.com service \citep{cyr2014security, Aprville:2015a}.
 
 \begin{figure}
-\begin{verbatim}
- 2D 02 00 00 01 00 A0 01 00 00 EC 2B 18 32 4E 12 63 66 8A 54
- 52 7D 9F 2B 92 22 99 C6 8E 0C AD 9B 42 A9 FE D4 FD A1 9B C5
- 62 C7 2B 6F 31 67 C2 C4 A8 4F 28 D0 42 51 BB 00 42 3D 7A 9D
- EA 72 5E 52 29 A3 5F 49 13 DD 45 24 17 C9 AD 93 30 3B 14 31
- 19 EC 4C D8 82 69 12 53 AD 7B 6D 8C DD 23 12 5E BE FC 8E 5D
-\end{verbatim}
-(Snipped to avoid excessive length. See appendix for full dump.)
-\begin{verbatim}
- 29 4A 30 B3 D7 79 CF A7 E8 75 EE 76 75 F4 04 48 63 F5 92 AF
- 18 6F E8 6C BD F4 D5 28 0D 17 59 81 83 91 72 1C 8D 25 B0 41
- B2 4D 22 01 A6 72 40 B9 3D B1 0A DF CD 56 B7 04 6C 84 58 0B
- BE D4 85 DB DC 99 2F F3 92 24 DD D2 DB 8C 54 81 FB CB A3 80
-\end{verbatim}
+\begin{center}
+\begin{framed}
+\texttt{2D 02 00 00 01 00 A0 01 00 00 EC 2B 18 32 4E 12 63 66 8A 54 \\
+52 7D 9F 2B 92 22 99 C6 8E 0C AD 9B 42 A9 FE D4 FD A1 9B C5 \\
+62 C7 2B 6F 31 67 C2 C4 A8 4F 28 D0 42 51 BB 00 42 3D 7A 9D \\
+EA 72 5E 52 29 A3 5F 49 13 DD 45 24 17 C9 AD 93 30 3B 14 31 \\
+19 EC 4C D8 82 69 12 53 AD 7B 6D 8C DD 23 12 5E BE FC 8E 5D} \\
+(Snipped to avoid excessive length. See appendix for full dump.) \\
+\texttt{29 4A 30 B3 D7 79 CF A7 E8 75 EE 76 75 F4 04 48 63 F5 92 AF \\
+18 6F E8 6C BD F4 D5 28 0D 17 59 81 83 91 72 1C 8D 25 B0 41 \\
+B2 4D 22 01 A6 72 40 B9 3D B1 0A DF CD 56 B7 04 6C 84 58 0B \\
+BE D4 85 DB DC 99 2F F3 92 24 DD D2 DB 8C 54 81 FB CB A3 80}
+\end{framed}
+\end{center}
 \caption{Example dump from Fitbit Charge HR. The middle 2/3 of the dump was cut to save space. See appendix for full dump.}
 \label{fig:megadump}
 \end{figure}
