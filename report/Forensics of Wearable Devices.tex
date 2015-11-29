@@ -18,7 +18,7 @@
 
 
 \begin{abstract}
-In recent years, a new category of electronic gadgets has appeared, called \textit{wearables}. They are designed to be an integrated part of your daily life and track your movements throughout your day. What information can these devices reveal to the forensic analyst? We take a closer look at an Android Wear smartwatch and a popular fitness band in order to find out.
+In recent years, a new category of electronic gadgets has appeared, called \textit{wearables}. They are designed to be an integrated part of your daily life and track your movements throughout your day. What information can these devices reveal to the forensic analyst? We take a closer look at an Android Wear smartwatch and a popular activity tracker in order to find out.
 
 This study provides examples of what data is available on these devices along with practical approaches to extracting this data.
 \end{abstract}
@@ -26,18 +26,18 @@ This study provides examples of what data is available on these devices along wi
 
 \section{Introduction}
 
-As the size of electronic components grow ever smaller, a new category of devices has emerged, called \textit{wearables}. Two types of wearables in particular, are beginning to see wide acceptance into mainstream use. These are the fitness band and the smartwatch. In just a couple of years, they have gone from being novelty devices, ridiculed for "looking silly" and having ridiculously short battery life, to being genuinely desirable devices for a lot of people.
+As the size of electronic components grow ever smaller, a new category of devices has emerged, called \textit{wearables}. Two types of wearables in particular, are beginning to see wide acceptance into mainstream use. These are the activity tracker and the smartwatch. In just a couple of years, they have gone from being novelty devices, ridiculed for "looking silly" and having ridiculously short battery life, to being genuinely desirable devices for a lot of people.
 
-While the distinction between smartwatches and fitness bands can sometimes be a bit muddy -- some fitness bands are starting to adopt many smartwatch features and vice versa -- fitness bands tend to be less focused on user interface and more focused on the usefulness of their sensors. Smartwatches, on the other hand, tend to have some fitness-related features, but these are often fewer and more limited. Smartwatches do tend to have a larger screen, a more powerful GUI and usually a smartphone-like operating system.
+While the distinction between smartwatches and activity trackers can sometimes be a bit muddy -- some activity trackers are starting to adopt many smartwatch features and vice versa -- activity trackers tend to be less focused on user interface and more focused on the usefulness of their sensors. Smartwatches, on the other hand, tend to have some fitness-related features, but these are often fewer and more limited. Smartwatches do tend to have a larger screen, a more powerful GUI and usually a smartphone-like operating system.
 
 What's common between the two types of devices, is that they are both worn on your wrist, and they are both meant to observe and measure the wearer throughout the day. They are also equipped with a variety of sensors for tracking activity, step counts, heart rate and other information about the wearer. Because of their close connection with the wearer, and focus on sensors and tracking, these new wearables could turn out to be a gold mine for the forensic analyst.
 
 In this study, we want to take a closer look at how we can extract information from these wearable devices. We will investigate what data is available to us, and how this can possibly be used in an investigation. Wearables are seldom used completely independently -- they are usually synced with either a computer, a smartphone or to the cloud -- and we will also look at what data can be extracted from these other systems.
 
+We have focused on two devices -- a smartwatch called \textit{LG Watch Urbane} and a activity tracker called \textit{Fitbit Charge HR}. We will dedicate sections to the findings for each of these devices after we've said a few words about the current state of forensic research for wearables.
+
 
 \section{Background and Related Work}
-
-Wearables are new technology, and there is not a lot of existing studies to be found on the subject. The authors have not been able to find a single existing study on the forensics of fitness bands.
 
 Earlier this year, in August 2015, two independent studies were published on the subject of the forensics of smartwatches. The study \cite{baggili2015watch} sheds a lot of light on the forensics process of Android Wear and Samsung Gear smartwatches. \cite{rughanianalysis} is a short study outlining artifacts that may be of interest in the Android Wear platform.
 
@@ -45,17 +45,17 @@ Both of these studies, however, assume that the device can be \textit{rooted} in
 
 Smartwatches have a close relationship with smartphones. Android Wear devices demand to be paired with a smartphone as a part of the initial setup process, and acts much as an extension of the phone. The smartwatch is mainly used as a relatively passive device for displaying messages and other content pushed to it by the smartphone. We will therefore also spend some time looking at smartphone forensics in this study. \cite{hoog2011android} has literally written the textbook on Android forensics with his comprehensive and aptly named book "Android Forensics". Another, very useful, resource on android forensics is \cite{vidas2011toward}.
 
+Although some research into digital forensics of activity trackers has been carried out, very little of it appears to be published. There has been at least one prior study on Fitbit, but this was specific towards the Fitbit Tracker, the first activity tracker from Fitbit. This model was based on the ANT+ communications platform and could only upload data by the use of a wireless base station connected to a computer. The computer kept clear-text logs of communication between the tracker and itself; and the data transmitted were unencrypted. Data uploaded to the Fitbit.com service was base-64-encoded but unencrypted, and was transmitted using HTTP (and not HTTPS). This allowed the researchers to reverse engineer the protocol between the base station and the tracker, and use this information to inject their own data into the device and to the website. \citep{rahman2013fit}
+
+This is the only Fitbit device to use ANT+, so the research in that paper does not appear to be directly applicable to the tracker used in this article. Fitbit is also improving their software with new firmware releases every now and then; so their changes may also invalidate findings from the Rahman paper. Unfortunately there doesn’t seem to be a lot of published security-related research relevant for the newer Fitbit devices, so we’ve had to rely on work carried out by individual researchers and people involved with the tools used as part of this paper. There has also been some e-mail correspondence with French security researcher Axelle Aprville, who have done some investigation and a few presentations on Fitbit trackers. There are some studies such as \cite{lee2014validity} related to the accuracy of both Fitbit trackers and other brands, and while these can be relevant for investigators trying to determine how accurately the tracker categorizes various activities these do not appear to be relevant for us.
+
+
 One of the most obviously useful types of data that may possibly be extracted from a wearable, is location data. \cite{maus2011forensic} contains a lot of useful information with regard to the extraction of geodata. As most wearables sync their data to the cloud, either via a smartphone or via a pc, the findings in \cite{chung2012digital} about cloud storage forensics are also very relevant to this study.
 
 As wearable devices do contain a lot of personal and sensitive data, the producers of wearables have had to take steps to ensure that this data can not be easily stolen and abused. The security additions to recent fitbit devices have been well documented in \cite{cyr2014security}.
 
 
-\section{Methods and Results}
-
-In this study, we have focused on two devices -- a smartwatch called \textit{LG Watch Urbane} and a fitness band called \textit{Fitbit Charge HR}. Below are detailed descriptions of our findings for each of the devices.
-
-
-\subsection{LG Watch Urbane}
+\section{LG Watch Urbane}
 
 \begin{wrapfigure}{r}{0.4\textwidth}
 \begin{center}
@@ -70,7 +70,7 @@ This smartwatch from LG is an Android Wear device. It is paired with a Samsung G
 Like all Android devices, it runs the Linux kernel with SELinux. Circumventing the security measures in an Android device is not trivial, and we are not going to attempt to hack the device in any way.
 
 
-\subsubsection{Getting started with \texttt{adb}}
+\subsection{Getting started with \texttt{adb}}
 
 We mentioned earlier that we do not want to assume the device is rooted. This means we have to access the data we're interested in by other means than by making file system images. One good way to get fairly low-level access to Android devices, is by using the \textit{Android Debug Bridge}, or \texttt{adb}, which can be easiest acquired by installing the \textit{Android Studio} development environment.
 
@@ -95,7 +95,7 @@ db6c036d	device
 \normalsize
 
 
-\subsubsection{Debug log acquisition}
+\subsection{Debug log acquisition}
 
 A valuable, and often overlooked, source of information about an Android device, is the logging system. This is a collection of circular buffers in RAM that contain all sorts of information from various apps and from the operating system itself. They can be dumped to the terminal with the \texttt{adb logcat} command. A list of all the different debug buffers can be printed using the following command:
 
@@ -119,7 +119,7 @@ This makes the debug logs highly volatile information that should be acquired as
 A good compromise might be to first put the device into a faraday bag, and then immediately plug the usb cable in and start the procedure for extracting the logs while the device is in the bag.
 
 
-\subsubsection{The \texttt{WearableConn} log tag}
+\subsection{The \texttt{WearableConn} log tag}
 
 The first thing you may want to look for in the log, is the \texttt{WearableConn} tag. These debug lines can be found both on the watch and on the phone, and they can tell you when the two devices got separated or brought together again. When the watch and phone lose connection for any reason, for instance because they move out of range of each other, a line like the following will be printed to the main log:
 
@@ -148,7 +148,7 @@ This can potentially be useful for determining what exact time an event happened
 \end{quote}
 
 
-\subsubsection{The \texttt{DisplayManagerService} log tag}
+\subsection{The \texttt{DisplayManagerService} log tag}
 
 The \texttt{DisplayManagerService} log statements can sometimes be useful. Specifically, the following line can tell us something important:
 
@@ -168,7 +168,7 @@ This line tells us that the screen has turned off. This can mean one of two thin
 \end{quote}
 
 
-\subsubsection{Log file statistics}
+\subsection{Log file statistics}
 
 Finally, we can take a step back and look at the log files in a different way. A device in active use generates more debug output than a device that's idling. By counting how many debug lines are printed during different periods of time, we can get some rough statistics on the activities on the user. Figure~\ref{fig:eventlog} shows a histogram created from the event log of the author's smartwatch.
 
@@ -183,14 +183,14 @@ Finally, we can take a step back and look at the log files in a different way. A
 The diagram shows quite clearly the time period when the author is sleeping. It also shows that the author does not sleep with the watch on his wrist. If that was the case, we would probably see more spurious activity from the watch at night, as the wearer moves.
 
 
-\subsubsection{Extracting the filesystem}
+\subsection{Extracting the filesystem}
 
 We made an attempt at extracting the file system of the LG watch without root access, but we did not have much success. Using \texttt{adb pull}, it is possible to fetch all the files we have read access to. The authors were not able to recover much useful information from these files, however.
 
 Likewise, using the \texttt{adb backup} command to extract files from the user partition of an non-rooted Android device turned out not to work on Android Wear. It appears the backup system has been disabled on most, if not all, Android Wear watches. We have still included a tool called \texttt{extract-files-by-adb-backup} because of its usefulness in extracting files from non-rooted phones.
 
 
-\subsubsection{Extracting data from the Google Fit API}
+\subsection{Extracting data from the Google Fit API}
 
 We were originally thinking that we would be able to extract fitness data from database files on the filesystem, but since we did not have root access on the watch, and it was not possible to use \texttt{adb backup} to extract files from the user data partition, we had to think outside of the box. Why not use the mechanism Google intended for us to use, namely the Google Fit API?
 
@@ -215,23 +215,23 @@ The extracted xml file also contains location data. This data can be converted i
 \end{figure}
 
 
-\subsection{Fitbit Charge HR}
+\section{Fitbit Charge HR}
 
-Data from activity trackers have already been part of at least one criminal case (Snyder 2014) and one injury lawsuit (Olson 2014); as they become more mainstream we can expect to see more of these devices related to criminal and other investigations. If so, the data captured by the device can be important in terms of supporting other evidence or claims from victims or suspects, and also to help establish the timeline of a crime.
+Data from activity trackers have already been part of at least one criminal case \citep{Snyder:2015} and one injury lawsuit \citep{Olson:2014}. As they become more mainstream we can expect to see more of these devices related to criminal and other investigations. If so, the data captured by the device can be important in terms of supporting other evidence or claims from victims or suspects, and also to help establish the timeline of a crime.
 
 In order for us to better relate to information uncovered as part of this work, let's imagine two scenarios. The first one involves a murder victim; little is known about the person or events surrounding the death, but the body was found with an activity tracker attached and a paired smartphone. Can the tracker contain any useful information, and is it possible to extract the data from it or the smartphone? In another scenario we have a committed crime, and a person with a motive. S/he claims to be innocent, and the investigators discovers an activity tracker related to the person. Does this hold any useful data supporting or contradicting the alibi, and if so how trustworthy are the data?
 
-To examine this, we decided to obtain a fitness band and use it regularly for a period to generate data. The device chosen is the Charge HR from the company Fitbit; which according to the manual has a 3-axis accelerometer used to measure motion. This data is then used to count the number of steps taken, distance traveled, calories burned, as well as the wearers' sleep quality. In addition it also has an altimeter which is used to measure the number of floors climbed, and a heart rate sensor measuring the pulse. It captures data on a per-minute basis stored on the device for the past seven days, also keeping an average for each day for the past 30 days.
+To examine this, we decided to obtain a activity tracker and use it regularly for a period to generate data. The device chosen is the Charge HR from the company Fitbit; which according to the manual has a 3-axis accelerometer used to measure motion. This data is then used to count the number of steps taken, distance traveled, calories burned, as well as the wearers' sleep quality. In addition it also has an altimeter which is used to measure the number of floors climbed, and a heart rate sensor measuring the pulse. It captures data on a per-minute basis stored on the device for the past seven days, also keeping an average for each day for the past 30 days.
 
 Although there are many similar devices on the market at present, the reasons for choosing this device were non-scientific and fairly basic:
 
 \begin{description}
 \item[Availability] several competing stores had multiple models from Fitbit in stock; most of them relatively inexpensive (<800,- NOK).
-\item[Popularity] According to the sales representatives asked it was a fairly popular brand; the author had also heard about Fitbit prior to starting this paper, the company also claims to have sold more than 30 million devices (Fitbit 2015)
+\item[Popularity] According to the sales representatives asked it was a fairly popular brand; the author had also heard about Fitbit prior to starting this paper, the company also claims to have sold more than 30 million devices \citep{Fitbit:2015}.
 \item[Proprietary] It wasn't based on Android (as the LG Watch Urbane covers this), but uses proprietary software specific to this company.
 \end{description}
 
-\subsubsection{Fitbit ecosystem}
+\subsection{Fitbit ecosystem}
 Although the activity tracker is capable of displaying the current number of steps, distance walked, pulse rate and floors climbed, it isn't possible to do much else on the device itself. Fitbit offers a free service on the website Fitbit.com, where users can access a “dashboard” (figure~\ref{fig:dash}) with visual representations of the captured data along with reports, interaction social networks such as Google+ and Facebook as well as various plans and goals. They also offer a paid “premium” service giving access to additional reports and functionality.
 
 \begin{figure}
@@ -244,7 +244,7 @@ Although the activity tracker is capable of displaying the current number of ste
 
 To upload data to this service, the Fitbit device needs to be paired with a computer and/or a smartphone. Communication between the devices uses the Bluetooth Low Energy (BTLE) protocol, and once paired the user only has to be within range of the receiver. Although uploads can be initiated manually, no interaction is normally required. On smartphones Fitbit offers this upload functionality as part of an app which contains a similar dashboard to the one found on Fitbit.com, although with less features.
 
-\subsubsection{Accessing the data}
+\subsection{Accessing the data}
 There are multiple approaches one can take in order to access the captured data, all depending on how much effort, time and resources is available. But from the approaches identified, we decided on the following three:
 
 \begin{itemize}
@@ -257,12 +257,12 @@ Fitbit doesn't support exports of the minute-by-minute data, also known as intra
 
 In addition to the data extraction, we also need to consider the integrity of the data. Ideally we want to be able to extract data without modifying the source in any way. If questions regarding the validity of the data or method used for extraction should arise at a later stage, an intact source will allow the investigators to extract a new copy. If the source data is changed during the extraction; how can we be sure that the data represents reality as captured by the device? This is also true if the extracted data is easy to modify, either at the point of extraction or prior to this.
 
-\subsubsection{Extracting data from the device itself}
+\subsection{Extracting data from the device itself}
 Fitbit doesn't support data extraction directly from the device itself, and offer no tools for doing so. Any extraction has to take place using tools developed through reverse-engineering the communications protocol formats used when uploading data to the Fitbit servers. Creating such tools will be too time- consuming and complex for this paper, but there are some tools already available for this purpose.
 
 Benoît Allard is the creator of Galileo\footnote{https://bitbucket.org/benallard/galileo}, a tool originally created to allow users of the Linux operating system to synchronize their trackers with Fitbit.com. Galileo runs on any operating system supporting Python and uses the USB BTLE dongle included with the Fitbit tracker to communicate with the device. By using this tool we can initiate communications with the device, extract datadumps from the device to the computer and not upload them to Fitbit.com.
 
-This results in a dump of the data from the device as shown in figure~\ref{fig:megadump}. This is a fragment of a dump often described as a “megadump”. There is another type of dump described as a “minidump”, or live data. The difference between the two is that the megadump contains the data sent to Fitbit.com, while the minidump apparently is a “live stream” of data for display purposes whenever the Fitbit device is near a paired smartphone. This enables the smartphone to display current data without synchronizing to the Fitbit.com service. (Cyr 2014, Aprville 2015a)
+This results in a dump of the data from the device as shown in figure~\ref{fig:megadump}. This is a fragment of a dump often described as a “megadump”. There is another type of dump described as a “minidump”, or live data. The difference between the two is that the megadump contains the data sent to Fitbit.com, while the minidump apparently is a “live stream” of data for display purposes whenever the Fitbit device is near a paired smartphone. This enables the smartphone to display current data without synchronizing to the Fitbit.com service \citep{cyr2014security, Aprville:2015a}.
 
 \begin{figure}
 \begin{verbatim}
@@ -283,9 +283,9 @@ This results in a dump of the data from the device as shown in figure~\ref{fig:m
 \label{fig:megadump}
 \end{figure}
 
-For the purpose of this article the megadump is the most interesting, as it is stored on the device and also on Fitbits own servers. Although the most recent live data is stored on the smartphone, there is no history associated with it as far as we can tell, so it has less value in our scenario. Aprville
+For the purpose of this article the megadump is the most interesting, as it is stored on the device and also on Fitbits own servers. Although the most recent live data is stored on the smartphone, there is no history associated with it as far as we can tell, so it has less value in our scenario.
 
-The entire megadump consists of hexadecimal characters as shown in figure~\ref{fig:megadump}; a comparison of multiple dumps indicates that there is a 16-byte header and a 9-byte footer with some apparently static bytes. This has also been indicated by (Allard 2014a) as well as (Aprville 2015b).
+The entire megadump consists of hexadecimal characters as shown in figure~\ref{fig:megadump}; a comparison of multiple dumps indicates that there is a 16-byte header and a 9-byte footer with some apparently static bytes. This has also been indicated by \cite{Allard:2014a} as well as \cite{Aprville:2015b}.
 
 Trying to convert it directly to binary or into plaintext results in nothing of use for us; and as the histogram below indicates the various bytes occur at approximately the same rate (+/- 1\%). For a table listing the bytecount, please refer to appendix B.
 
@@ -303,12 +303,13 @@ Trying to convert it directly to binary or into plaintext results in nothing of 
 \label{fig:histogram_nometa}
 \end{figure}
 
-But as figure~\ref{fig:histogram_meta} shows, there are some anomalies. The byte 00 appear to be overrepresented having a ratio of 0.7\%, but once we adjust for the 16-byte header and a 9-byte footer the result is much more even leaving us with a histogram of the data only (figure~\ref{fig:histogram_nometa}). There seems to be around one percent separating the most and least common byte, which suggests that Fitbit is using some kind of encryption and/or compression before sending the data from the device. According to a presentation made by French security researcher Axelle Aprville, Fitbit encrypts data on the tracker; the software running on the paired computer or smartphone doesn't decrypt the information but act as a relay towards Fitbit.com where it is assumed to be decrypted and further processed. (Aprville 2015a) This is also supported by correspondence on the Galileo mailing list (Allard 2014b). Aprville mentions AES and XTEA as possible candidates for the encryption algorithm, but confirming this will be difficult with no access to the source code. The only method likely give us further insight would be to decompile the firmware on the device. Doing this can also safely be said to fall outside the scope of this article, so further research is needed for this approach.
+But as figure~\ref{fig:histogram_meta} shows, there are some anomalies. The byte 00 appear to be overrepresented having a ratio of 0.7\%, but once we adjust for the 16-byte header and a 9-byte footer the result is much more even leaving us with a histogram of the data only (figure~\ref{fig:histogram_nometa}). There seems to be around one percent separating the most and least common byte, which suggests that Fitbit is using some kind of encryption and/or compression before sending the data from the device. According to a presentation made by French security researcher Axelle Aprville, Fitbit encrypts data on the tracker; the software running on the paired computer or smartphone doesn't decrypt the information but act as a relay towards Fitbit.com where it is assumed to be decrypted and further processed \citep{Aprville:2015a}. This is also supported by correspondence on the Galileo mailing list \citep{Allard:2014b}. Aprville mentions AES and XTEA as possible candidates for the encryption algorithm, but confirming this will be difficult with no access to the source code. The only method likely give us further insight would be to decompile the firmware on the device. Doing this can also safely be said to fall outside the scope of this article, so further research is needed for this approach.
 
+\subsubsection{Integrity of the device data}
 Assessing the integrity of the data at present can be regarded as difficult. There is currently no way to extract the data from our tracker, and no way of knowing what is left on the device after a dump has been extracted, or if the data is wiped from memory.
 
 
-\subsubsection{Downloading data from the Fitbit API}
+\subsection{Downloading data from the Fitbit API}
 As mentioned earlier, Fitbit currently doesn't offer any way to download intraday data from the dashboard at Fitbit.com. They do offer an export service for daily averages, but for our purpose this is not useful.
 
 The Fitbit API\footnote{https://dev.fitbit.com} in the form of a web service which can be used to access data. To use this API, you have to register an “app” with Fitbit. There are three types of apps; server, client and personal. All three have access to daily averages; the latter one also have access to the intraday data of the app owner. It is possible to obtain intraday data on the two former types of apps, but this requires individual approval from Fitbit as this also have the potential of allowing an app to access other user's data. (Fitbit 2014b)
@@ -327,6 +328,7 @@ While testing this, we were able to obtain data starting from the date our user 
 
 The caveat of this method is of course that the data from the Fitbit tracker must be uploaded for this to work. Given our scenario this would require a murder victim to have a paired device nearby with an active network connection. Given that the device is designed to be used with a smartphone this isn't unlikely, but it is still a disadvantage for the investigators compared to extracting data directly from the device.
 
+\subsubsection{Integrity of the API data}
 One important issue is that the API supports methods for writing data as well as reading. Although writing data using the API wasn't tested, it is possible to see what apps a user has approved and their permissions. Figure~\ref{fig:apisettings} shows a screenshot from the Fitbit.com settings, showing the list of the authors approved apps. If we assume that investigators of a crime has access to the relevant Fitbit user accounts, a quick check on this page might give an indication if any registered apps have write access, and if so to what types of data.
 
 \begin{figure}
@@ -339,7 +341,7 @@ One important issue is that the API supports methods for writing data as well as
 Unfortunately there doesn't seem to be any way to see a historical record of approved or removed apps on the website or in the API. Therefore it is theoretically possible for a person to create their own app and use it to modify their data, removing and deleting the app from Fitbit once done. To verify such as case would likely require forensic examination of other computer equipment and/or cooperation from Fitbit itself.
 
 
-\subsubsection{Extracting the data from a smartphone}
+\subsection{Extracting the data from a smartphone}
 
 Similar to the device and dashboard, Fitbit doesn't offer any built-in functionality for extracting the data from the smartphone application. Although it might be possible to use adb backup to retrieve the data, this method is reliant upon the application supporting it. Another alternative, although more invasive is to gain root access on the phone which allows us to see (and copy) anything stored on it.
 
@@ -437,14 +439,28 @@ The file \texttt{TrackerSync.xml} holds a number of timestamps, which looks like
 
 Then there is a file \texttt{LiveDateSavedState.xml} containing the last set of live data. Based on the values these appear to be a cumulative dataset; there is no timestamp on the data however so time framing these data would be difficult.
 
+\subsubsection{Integrity of the extracted data}
 The data was extracted by adding a number of files to a zip-file. As the smartphone was rooted before we began this project, this shouldn’t affect the integrity.
 
 
-\section{Discussion and Conclusion}
+\subsection{Conclusion}
+
+Based on what we have observed through our own testing extracting useable data from the device isn’t possible at the moment. The data retrieved from the tracker is likely to be encrypted with an unknown algorithm and key; this also correlates with what others have experienced. If retrieving data directly from the device is critical to an investigation, the only likely approach is to request help from Fitbit.
+
+Extracting data from the API is possible and have been demonstrated during this project. To access data owned by any other profile but your own requires Fitbit approval as well as user approval. As seen from a forensic point-of-view this would require access to the Fitbit user account in question in order to be a useable approach. If this is the case however; it should be possible to sync a tracker holding important information with Fitbit, and then access the same data through the API.
+
+Although the data extracted from the smartphone didn’t give us any minute-by-minute data, it did give us some interesting information related to keys and IDs. More research is needed to determine if any of the key-like values found can be used in any way to decrypt data from the Fitbit tracker or if they can be used against the API. However, in \cite{Snyder:2015} an essential bit of information was the fact that the alleged rape victim didn’t sleep during the night. In this project we were able to extract similar information from the smartphone. Despite not being able to extract data directly from the tracker, a forensic analysis of paired devices can still give valuable information without having to know or access the users own account on Fitbit.com. Our analysis was from the files stored on disk; a more in depth analysis may reveal more information stored in volatile memory on the device.
+
+Although more research is needed into the data being sent from the tracker and the data stored on a paired smartphone, it would appear that even a superficial analysis such as ours can be beneficial to investigators. We managed to find a connection between the physical tracker and a smartphone; and from the smartphone to the e-mail address used when registering with Fitbit.com.
+
+Even though we couldn’t extract as much information from the device or smartphone as we had hoped, there still appears to be viable approaches for getting this information out of the tracker if it is allowed to upload data to Fitbit.com.
+
+
+\section{Discussion}
 
 \textit{We'll probably need to cooperate on this one. We can all write a small discussion on the devices we've looked at, and one of us can try to mold that into a single conclusion with some words of comparison between the devices. In any case, we need to write the above section first.}
 
 \bibliographystyle{agsm}
-\bibliography{Forensics of Wearable Devices}
+\bibliography{forensics.bib}
 
 \end{document}
