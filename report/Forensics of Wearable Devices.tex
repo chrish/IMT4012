@@ -10,7 +10,7 @@
 \usepackage{wrapfig}
 \usepackage{appendix}
 \usepackage{multicol}
-\usepackage{pdflscape}
+\usepackage{lscape}
 \usepackage{array}
 \usepackage{framed}
 \usepackage[margin=3cm]{geometry}
@@ -114,24 +114,34 @@ db6c036d	device
 
 \subsection{Debug log acquisition}
 
-A valuable, and often overlooked, source of information about an Android device, is the logging system. This is a collection of circular buffers in RAM that contain all sorts of information from various apps and from the operating system itself. They can be dumped to the terminal with the \texttt{adb logcat} command. A list of all the different debug buffers can be printed using the following command:
+A valuable, and often overlooked, source of information about an Android device, is the logging system. This is a collection of circular buffers in RAM that contain all sorts of information from various apps and from the operating system itself. They can be dumped to the terminal with the \texttt{adb logcat} command. To dump all the current logs with timestamps, you can use the following command:
 
 \scriptsize
 \begin{verbatim}
-$ adb logcat -g -b all
-main: ring buffer is 256Kb (255Kb consumed), max entry is 5120b, max payload is 4076b
-system: ring buffer is 256Kb (248Kb consumed), max entry is 5120b, max payload is 4076b
-radio: ring buffer is 256Kb (19Kb consumed), max entry is 5120b, max payload is 4076b
-events: ring buffer is 256Kb (254Kb consumed), max entry is 5120b, max payload is 4076b
-crash: ring buffer is 256Kb (0b consumed), max entry is 5120b, max payload is 4076b
+    $ adb logcat -v time -d
 \end{verbatim}
 \normalsize
 
+\noindent
+A list of all the different debug buffers can be printed using the following command:
+
+\scriptsize
+\begin{verbatim}
+    $ adb logcat -g -b all
+    main: ring buffer is 256Kb (255Kb consumed), max entry is 5120b, max payload is 4076b
+    system: ring buffer is 256Kb (248Kb consumed), max entry is 5120b, max payload is 4076b
+    radio: ring buffer is 256Kb (19Kb consumed), max entry is 5120b, max payload is 4076b
+    events: ring buffer is 256Kb (254Kb consumed), max entry is 5120b, max payload is 4076b
+    crash: ring buffer is 256Kb (0b consumed), max entry is 5120b, max payload is 4076b
+\end{verbatim}
+\normalsize
+
+\noindent
 In the \texttt{android} folder in the provided tools repository, there's a python script called \texttt{extract-logs} which can be used to automatically dump each of the available logs to a file along with the outputs of \texttt{adb shell dmesg} and \texttt{adb shell dumpsys}.
 
 Since these logs are stored in circular buffers, the oldest log entries are constantly being overwritten by new information. It's not possible to say exactly how many hours worth of logs there are, because this depends on how verbose the software running on the device is, but typically around 5--8 hours worth of logs can be expected on an Android Wear device. There are usually fewer hours worth of logs available in an Android phone, because there is typically more software running, and more debug statements printed to the logs.
 
-This makes the debug logs highly volatile information that should be acquired as soon as possible after getting hold of a live device. While it may be normal procedure to put the device straight into a faraday bag to avoid remove wiping of the device, this can actually be detrimental to the analysts ability to retrieve anything useful from the logging system. Not only are old log statements constantly being overwritten the entire time the phone is in the bag, but depriving the phone of network connection is likely to increase the flow of error messages printed to the logs. This will make old log statements be overwritten at a much higher rate than normal.
+This makes the debug logs highly volatile information that should be acquired as soon as possible after getting hold of a live device. While it may be normal procedure to put the device straight into a faraday bag to avoid remote wiping of the device, this can actually be detrimental to the analysts ability to retrieve anything useful from the logging system. Not only are old log statements constantly being overwritten the entire time the phone is in the bag, but depriving the phone of network connection is likely to increase the flow of error messages printed to the logs. This will make old log statements be overwritten at a much higher rate than normal.
 
 A good compromise might be to first put the device into a faraday bag, and then immediately plug the usb cable in and start the procedure for extracting the logs while the device is in the bag.
 
@@ -142,7 +152,7 @@ The first thing you may want to look for in the log, is the \texttt{WearableConn
 
 \scriptsize
 \begin{verbatim}
-11-11 17:01:03.705 I/WearableConn(  774): Connection closed, waiting.
+    11-11 17:01:03.705 I/WearableConn(  774): Connection closed, waiting.
 \end{verbatim}
 \normalsize
 
@@ -151,7 +161,7 @@ When the two devices are brought back together, the following line can be found 
 
 \scriptsize
 \begin{verbatim}
-11-11 17:06:14.011 I/WearableConn(  774): Connected, running sync loop
+    11-11 17:06:14.011 I/WearableConn(  774): Connected, running sync loop
 \end{verbatim}
 \normalsize
 
@@ -171,7 +181,8 @@ The \texttt{DisplayManagerService} log statements can sometimes be useful. Speci
 
 \scriptsize
 \begin{verbatim}
-11-11 19:29:00.971 I/DisplayManagerService(  573): Display device changed state: "Built-in Screen", OFF
+    11-11 19:29:00.971 I/DisplayManagerService(  573): Display device changed state:
+                    "Built-in Screen", OFF
 \end{verbatim}
 \normalsize
 
@@ -183,6 +194,9 @@ This line tells us that the screen has turned off. This can mean one of two thin
 
 \textit{We now know the kidnapper has a one hour head start on us, but he's on foot.}
 \end{quote}
+
+\noindent
+If you want to have a look at how a real log file looks like, an extract which contains all of the example lines above, is provided in appendix~\ref{app:log}.
 
 
 \subsection{Log file statistics}
@@ -231,7 +245,13 @@ The extracted xml file also contains location data. This data can be converted i
 \label{fig:geodata}
 \end{figure}
 
-\pagebreak
+
+\subsection{Conclusion}
+
+As we have seen from these examples, there appears to be plenty of opportunities for the forensic analyst to extract very useful data even from non-rooted Android Wear devices. While physical acquisition of data is generally not possible, there are many avenues open to us for logical acquisition. From a forensic soundness standpoint, this is not ideal, but by establishing good procedures and dependable tools for extracting this data, it should still be possible to do it in a sufficiently robust way.
+
+However, the data extraction methods shown above, also have some significant advantages. None of them depend on exploiting quirks or vulnerabilities in the specific device, but instead make use of standard interfaces that are supported and maintained by Google and the various vendors. This means that these tools and methods will most likely work on any Android Wear device from any vendor. They will also most likely continue to work for the foreseeable future.
+
 
 \section{Fitbit Charge HR}
 \begin{wrapfigure}{r}{0.4\textwidth}
@@ -495,7 +515,8 @@ Although our study demonstrates that it is possible to obtain data from these de
 
 \newpage
 \appendix
-\Huge{List of appendices}
+\noindent
+\Huge{Appendices}
 \normalsize
 \section{Megadump from Charge HR}\label{app:megadump}
 
@@ -837,4 +858,83 @@ Below is a the full output of the megadump as shown in figure \ref{fig:megadump}
 		\end{tabular}
 \end{table}
 \end{landscape}
+
+
+\newpage
+\section{Extract of log from Android Wear device}
+\label{app:log}
+
+\scriptsize
+\begin{verbatim}
+11-30 19:29:41.667 V/DreamService[AmbientDream](  914): finish(): mFinished=false
+11-30 19:29:41.668 I/DreamManagerService(  575): Leaving dreamland.
+11-30 19:29:41.669 D/PowerHAL(  575): IDLE_MODE(touch) -> 0
+11-30 19:29:41.669 I/DreamController(  575): Stopping dream: name=ComponentInfo{com.google.andr
+                 oid.wearable.ambient/com.google.android.wearable.ambient.AmbientDream}, isTest=false,
+                 canDoze=true, userId=0
+11-30 19:29:41.673 I/PowerManagerService(  575): Sleeping (uid 1000)...
+11-30 19:29:41.676 V/DreamService[AmbientDream](  914): detach(): Calling onDreamingStopped()
+11-30 19:29:41.676 I/AmbientService(  914): Ambient Stopping
+11-30 19:29:41.679 D/AmbientService(  914): exitAmbient: AmbientActivity[component=ComponentInfo{
+                 com.google.android.wearable.app/com.google.android.clockwork.home.HomeActivity}, callba
+                 cks=@46990b1, running=true, ambient=true] main 1
+11-30 19:29:41.687 D/AmbientService(  914): AmbientDreamStub.detach called while disabled
+11-30 19:29:41.695 V/DreamService[AmbientDream](  914): onDestroy()
+11-30 19:29:41.751 D/AmbientService(  914): onAmbientExited: AmbientActivity[component=Componen
+                 tInfo{com.google.android.wearable.app/com.google.android.clockwork.home.HomeActivity},
+                 callbacks=@46990b1, running=true, ambient=false] Binder_2 55
+11-30 19:29:41.782 I/AudioFlinger(  198): AudioFlinger's thread 0xb568d008 ready to run
+11-30 19:29:41.796 D/audio_hw_primary(  198): select_devices: out_snd_device(0: none) in_snd_devic
+                 e(55: voice-rec-mic)
+11-30 19:29:41.796 D/msm8974_platform(  198): platform_send_audio_calibration: sending audio calibr
+                 ation for snd_device(55) acdb_id(62)
+11-30 19:29:41.796 D/        (  198): Failed to fetch the lookup information of the device 0000003E 
+11-30 19:29:41.796 D/        (  198): Failed to fetch the lookup information of the device 0000003E 
+11-30 19:29:41.796 D/audio_hw_primary(  198): enable_snd_device: snd_device(55: voice-rec-mic)
+11-30 19:29:41.808 D/audio_hw_primary(  198): enable_audio_route: apply and update mixer path: audi
+                 o-record
+11-30 19:29:42.389 I/DisplayManagerService(  575): Display device changed state: "Built-in Screen", OFF
+11-30 19:29:42.393 V/ActivityManager(  575): Display changed displayId=0
+11-30 19:29:42.403 D/SurfaceFlinger(  176): Set power mode=0, type=0 flinger=0xb8584550
+11-30 19:29:42.894 I/qdhwcomposer(  176): handle_blank_event: dpy:0 panel power state: 0
+11-30 19:29:42.895 D/SurfaceControl(  575): Excessive delay in setPowerMode(): 505ms
+11-30 19:29:42.896 D/PowerHAL(  575): IDLE_MODE(touch) -> 1
+11-30 19:29:42.906 I/InputReader(  575): Reconfiguring input devices.  changes=0x00000004
+11-30 19:29:42.906 I/InputReader(  575): Device reconfigured: id=3, name='synaptics_rmi4_i2c', size 320
+                 x320, orientation 0, mode 1, display id 0
+11-30 19:29:42.907 I/InputReader(  575): Reconfiguring input devices.  changes=0x00000004
+11-30 19:29:42.918 I/InputReader(  575): Reconfiguring input devices.  changes=0x00000004
+11-30 19:29:42.918 I/InputReader(  575): Device reconfigured: id=3, name='synaptics_rmi4_i2c', size 320
+                 x320, orientation 0, mode 1, display id 0
+11-30 19:29:42.919 I/InputReader(  575): Reconfiguring input devices.  changes=0x00000004
+11-30 19:29:42.945 D/AmbientService(  914): onPaused: AmbientActivity[component=ComponentInfo{co
+                 m.google.android.wearable.app/com.google.android.clockwork.home.HomeActivity}, callbacks
+                 =@46990b1, running=true, ambient=false] Binder_4 57
+11-30 19:29:42.953 D/AmbientService(  914): onStopped: AmbientActivity[component=ComponentInfo{c
+                 om.google.android.wearable.app/com.google.android.clockwork.home.HomeActivity}, callbac
+                 ks=@46990b1, running=false, ambient=false] Binder_3 56
+11-30 19:29:42.982 D/audio_hw_primary(  198): disable_audio_route: reset and update mixer path: audi
+                 o-record
+11-30 19:29:42.985 D/audio_hw_primary(  198): disable_snd_device: snd_device(55: voice-rec-mic)
+11-30 19:32:46.472 W/bt-btif ( 1101): invalid rfc slot id: 67
+11-30 19:32:46.475 I/WearableConn(  776): Connection closed, waiting.
+11-30 19:32:46.482 I/WearableConn(  776): Waiting 0.1 seconds to retry connection
+11-30 19:32:46.599 D/BluetoothManagerService(  575): checkIfCallerIsForegroundUser: valid=true callin
+                 gUser=0 parentUser=-10000 foregroundUser=0
+11-30 19:32:46.600 W/BluetoothAdapter(  776): getBluetoothService() called with no BluetoothManagerC
+                 allback
+11-30 19:32:46.602 I/WearableConn(  776): Accepting connections
+11-30 19:32:46.604 D/BluetoothAdapterProperties( 1101): Discoverable Timeout:0
+1-30 19:32:46.609 D/BluetoothAdapterProperties( 1101): Scan Mode:21
+11-30 19:32:46.609 D/WearableBluetooth(  776): set scan mode to 21 (enabled)
+11-30 19:32:47.982 W/bt-rfcomm( 1101): rfc_find_lcid_mcb LCID reused LCID:0x43 current:0x0
+11-30 19:32:47.982 W/bt-rfcomm( 1101): RFCOMM_DisconnectInd LCID:0x43
+11-30 19:32:48.067 E/bt-btm  ( 1101): btm_sec_disconnected - Clearing Pending flag
+11-30 19:32:49.638 I/PowerManagerService(  575): Waking up from sleep (uid 1000)...
+11-30 19:32:49.641 I/DisplayPowerController(  575): Blocking screen on until initial contents have been
+                 drawn.
+11-30 19:32:49.645 D/PowerHAL(  575): IDLE_MODE(touch) -> 0
+\end{verbatim}
+\normalsize
+
 \end{document}
