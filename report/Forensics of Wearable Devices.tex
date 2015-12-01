@@ -60,7 +60,7 @@ As wearable devices do contain a lot of personal and sensitive data, the produce
 
 
 \section{Software created as part of this study}
-For this study to be undertaken it was nescessary to create a few software tools to help us extract and understand the data. As the authors have different backgrounds and experience, we decided to create separate repositories for the two devices studied. Both repositories can be found on github.com; which is a free and web-based git hosting service.
+For this study to be undertaken it was necessary to create a few software tools to help us extract and understand the data. As the authors have different backgrounds and experience, we decided to create separate repositories for the two devices studied. Both repositories can be found on github.com; which is a free and web-based git hosting service.
 
 \begin{description}
 \item [LG Watch Urbane] Python-based tools. Repository URL:
@@ -416,6 +416,7 @@ The data extracted from the app data directory consists of the following directo
 \item No content related to tracker data or authentication towards the tracker in either.
 \end{itemize}
 
+\begin{samepage}
 \noindent
 \texttt{cache}
 \begin{itemize}
@@ -425,6 +426,7 @@ The data extracted from the app data directory consists of the following directo
 \item \texttt{httpcache} also contains the file \texttt{journal}, which seems to be related to something called \texttt{DiskLruCache}. Based on the available Android documentation this might be related to the data in datacache.
 \item Also contains a binary file; \texttt{com.android.opengl.shaders\_cache} which seems to be related to the graphics.
 \end{itemize}
+\end{samepage}
 
 \noindent
 In addition to these, we also found directories called \texttt{databases}, \texttt{files} and \texttt{shared\_prefs}. Based on the content these deserve a more detailed description.
@@ -506,7 +508,7 @@ As the previous sections show, it is possible to extract valuable data from the 
 
 In their most recent estimate, International Data Corporation estimates that the number of "Smart Wristwear" devices shipped will increase from just below 24 million devices in 2015 to just over 85 million devices in 2019. These numbers do not appear to include activity tracker manufacturers such as Fitbit. \cite{idc2015} We have not been able to find similar forecasts for activity trackers, but at least one report estimates that activity tracker ownership will peak in the United States in 2016, with just over 30 million device owners. Worldwide numbers are unknown, but the report states that a decline of activity tracker ownership is expected as smartwatches gradually replaces the activity tracker. \cite{npd2015}
 
-The ability to safely extract and understand the data from these devices will therefore be increasingly important, especially as higher usage may result in additional and more accurate sensors. As shown with the Fitbit Charge HR there can also be several sources for the data, not just the tracker itself. This is particularly true for devices which have the potential of being constantly connected to the internet, such as smartphones when we consider the scenario described in section 3.3.  
+The ability to safely extract and understand the data from these devices will therefore be increasingly important, especially as higher usage may result in additional and more accurate sensors. As shown with the Fitbit Charge HR there can also be several sources for the data, not just the tracker itself. This is particularly true for devices which have the potential of being constantly connected to the internet, such as smartphones when we consider the scenario described in section 4.3.  
 
 Although our study demonstrates that it is possible to obtain data from these devices, more thorough research is needed as the devices may hold additional data in RAM, or other locations on the device memory. 
 
